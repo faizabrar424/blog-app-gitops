@@ -16,7 +16,7 @@ spec:
       serviceAccountName: blog-app-sa
       containers:
         - name: blog-app
-          image: ghcr.io/faizabrar424/blog-app:v1.0.4
+          image: ghcr.io/faizabrar424/blog-app:v1.0.1
           imagePullPolicy: IfNotPresent
           ports:
             - containerPort: 3000
