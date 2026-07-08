@@ -1,0 +1,9 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: blog-app-configmap
+  namespace: blog-app
+data:
+  MONGOLOQUENT_DATABASE_NAME: 'digicode_blog'
+  MONGOLOQUENT_TIMEZONE: 'Asia/Jakarta'
+  BASE_URL: 'http://localhost:3000'

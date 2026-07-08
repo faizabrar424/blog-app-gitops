@@ -1,0 +1,51 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: blog-app            # nama Deployment
+  namespace: blog-app
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: blog-app         # Label Pod yang akan dikelola Deployment
+  template:
+    metadata:
+      labels:
+        app: blog-app       # Label yang diberikan ke setiap Pod yang dibuat
+    spec:
+      serviceAccountName: blog-app-sa
+      containers:
+        - name: blog-app
+          image: ghcr.io/faizabrar424/blog-app:v1.0.4
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 3000
+          envFrom:
+            - configMapRef:
+                name: blog-app-configmap
+            - secretRef:
+                name: blog-app-secret
+          readinessProbe:
+            httpGet:
+              path: /api/health
+              port: 3000
+            initialDelaySeconds: 10 # tunggu 10 detik setelah pod start baru mulai cek
+            periodSeconds: 10       # cek setiap 10 detik
+            timeoutSeconds: 5       # kalau tidak ada response dalam 5 detik -> dianggap gagal
+            failureThreshold: 3     # gagal 3x berturut-turut -> pod dianggap tidak ready
+          livenessProbe:
+            httpGet:
+              path: /api/health
+              port: 3000
+            initialDelaySeconds: 15
+            periodSeconds: 20
+            timeoutSeconds: 5
+            failureThreshold: 3
+          resources:                # resource request and limit
+            requests:
+              cpu: 50m
+              memory: 128Mi
+            limits:
+              cpu: 300m
+              memory: 256Mi
+        

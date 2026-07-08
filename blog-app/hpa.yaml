@@ -1,0 +1,38 @@
+apiVersion: autoscaling/v2
+kind: HorizontalPodAutoscaler
+metadata:
+  name: blog-app-hpa
+  namespace: blog-app
+spec:
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: blog-app
+  minReplicas: 1
+  maxReplicas: 3
+  metrics:
+  - type: Resource
+    resource:
+      name: cpu
+      target:
+        type: Utilization
+        averageUtilization: 70
+# - type: Resource
+#   resource:
+#     name: memory
+#     target:
+#       type: Utilization
+#       averageUtilization: 75
+  behavior:
+    scaleUp:
+      stabilizationWindowSeconds: 60      # tunggu 60 detik sebelum scale up
+      policies:
+      - type: Pods
+        value: 1
+        periodSeconds: 60                 # maksimal tambah 1 replica per 60 detik
+    scaleDown:
+      stabilizationWindowSeconds: 300     # tunggu 5 menit sebelum scale down
+      policies:
+      - type: Pods
+        value: 1
+        periodSeconds: 60                 # maksimal kurangi 1 replica per 60 detik

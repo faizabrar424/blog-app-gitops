@@ -1,0 +1,19 @@
+apiVersion: gateway.networking.k8s.io/v1
+kind: HTTPRoute
+metadata:
+  name: blog-app-route
+  namespace: blog-app
+spec:
+  parentRefs:
+  - name: blog-app-gateway
+    sectionName: https
+  hostnames:
+  - "blog-app.labstack"
+  rules:
+  - matches:
+    - path:
+        type: PathPrefix
+        value: /
+    backendRefs:
+    - name: blog-app
+      port: 3000

@@ -1,0 +1,24 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: blog-app-ingress
+  namespace: blog-app
+  annotations:
+    cert-manager.io/cluster-issuer: blog-app-ca-issuer  # tambahan untuk https
+spec:
+  ingressClassName: nginx
+  tls:                                                  # tambahan untuk https
+  - hosts:
+    - blog-app.labstack
+    secretName: blog-app-tls
+  rules:
+  - host: blog-app.labstack
+    http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: blog-app
+            port:
+              number: 3000

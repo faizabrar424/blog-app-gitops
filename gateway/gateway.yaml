@@ -1,0 +1,20 @@
+apiVersion: gateway.networking.k8s.io/v1
+kind: Gateway
+metadata:
+  name: blog-app-gateway
+  namespace: blog-app
+spec:
+  gatewayClassName: eg
+  listeners:
+  - name: http
+    protocol: HTTP
+    port: 80
+  - name: https
+    protocol: HTTPS
+    port: 443
+    hostname: blog-app.labstack  # Domain Aplikasi
+    tls:
+      mode: Terminate
+      certificateRefs:
+      - kind: Secret
+        name: blog-app-tls       # Secret sertifikat TLS

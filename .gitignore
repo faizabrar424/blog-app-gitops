@@ -1,0 +1,16 @@
+# Secret
+blog-app/secret.yaml
+mongodb/secret.yaml
+
+# Certificate & private key
+ca-issuer/ca.crt
+ca-issuer/ca.key
+
+# Velero credentials
+credentials-velero
+
+*-values.yaml
+
+# OS files
+.DS_Store
+.env

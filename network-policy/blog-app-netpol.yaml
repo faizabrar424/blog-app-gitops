@@ -1,0 +1,27 @@
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: blog-app-netpol
+  namespace: blog-app
+spec:
+  podSelector:
+    matchLabels:
+      app: blog-app
+  policyTypes:
+  - Ingress
+  - Egress
+  ingress:
+  - from:
+    - namespaceSelector:
+        matchLabels:
+          #kubernetes.io/metadata.name: ingress-nginx
+          kubernetes.io/metadata.name: envoy-gateway-system
+  egress:
+  - to:
+    - podSelector:
+        matchLabels:
+          app: mongodb
+  - to:
+    - namespaceSelector:
+        matchLabels:
+          kubernetes.io/metadata.name: kube-system
